@@ -6,14 +6,15 @@ import bg.softuni.pochivkarest.model.entity.User;
 import bg.softuni.pochivkarest.model.enums.TownEnum;
 import bg.softuni.pochivkarest.repository.TownRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserMapper {
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final TownRepository townRepository;
 
     @Autowired
-    public UserMapper(TownRepository townRepository) {
-//        this.passwordEncoder = passwordEncoder;
+    public UserMapper(PasswordEncoder passwordEncoder, TownRepository townRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.townRepository = townRepository;
     }
 
@@ -22,8 +23,8 @@ public class UserMapper {
         user.setEmail(userRegisterDTO.getEmail());
         user.setFirstName(userRegisterDTO.getFirstName());
         user.setLastName(userRegisterDTO.getLastName());
-//        String encodedPass = this.passwordEncoder.encode(userRegisterDTO.getPassword());
-        user.setPassword(userRegisterDTO.getPassword());
+        String encodedPass = this.passwordEncoder.encode(userRegisterDTO.getPassword());
+        user.setPassword(encodedPass);
         user.setTelephone(userRegisterDTO.getTelephone());
         String userRegisterDTOTown = userRegisterDTO.getTown();
         TownEnum townEnum = null;
