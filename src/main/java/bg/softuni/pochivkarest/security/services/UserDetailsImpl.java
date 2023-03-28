@@ -13,23 +13,22 @@ import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
-    private static final long serialVersionUID = 1L;
-    private Long id;
+
     private String username;
-    private String email;
-    @JsonIgnore
     private String password;
+    private String firstName;
+    private String lastName;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id,
-                           String username,
-                           String email,
+    public UserDetailsImpl(String username,
                            String password,
+                           String firstName,
+                           String lastName,
                            Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.authorities = authorities;
     }
 
@@ -37,10 +36,11 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
-        return new UserDetailsImpl(user.getId(),
+        return new UserDetailsImpl(
                 user.getUsername(),
-                user.getEmail(),
                 user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
                 authorities);
     }
 
@@ -49,12 +49,12 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Long getId() {
-        return id;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
@@ -87,13 +87,4 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        UserDetailsImpl user = (UserDetailsImpl) obj;
-        return Objects.equals(id, user.id);
-    }
 }
