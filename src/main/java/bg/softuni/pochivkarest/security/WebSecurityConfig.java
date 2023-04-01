@@ -32,7 +32,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/auth/**")
                 .permitAll()
                 .requestMatchers("/search-rest", "/accommodation",
-                        "/comfort", "/category", "/town", "/hotel-detail-rest/**")
+                        "/comfort", "/category", "/town", "/hotel-detail-rest/**",
+                        "/room", "/season")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

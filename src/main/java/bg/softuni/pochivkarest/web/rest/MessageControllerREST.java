@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 public class MessageControllerREST {
-    private MessageService messageService;
+    private final MessageService messageService;
 
     @Autowired
     public MessageControllerREST(MessageService messageService) {

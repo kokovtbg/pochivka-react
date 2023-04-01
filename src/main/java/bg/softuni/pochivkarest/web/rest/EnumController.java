@@ -1,9 +1,6 @@
 package bg.softuni.pochivkarest.web.rest;
 
-import bg.softuni.pochivkarest.model.enums.Accommodation;
-import bg.softuni.pochivkarest.model.enums.ComfortEnum;
-import bg.softuni.pochivkarest.model.enums.HotelCategory;
-import bg.softuni.pochivkarest.model.enums.TownEnum;
+import bg.softuni.pochivkarest.model.enums.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +31,15 @@ public class EnumController {
     @GetMapping("/town")
     public ResponseEntity<List<TownEnum>> getAllTowns() {
         return ResponseEntity.ok(Arrays.stream(TownEnum.values()).toList());
+    }
+
+    @GetMapping("/room")
+    public List<RoomType> getAllRoomTypes() {
+        return Arrays.stream(RoomType.values()).toList();
+    }
+
+    @GetMapping("/season")
+    public List<Season> getAllSeasons() {
+        return Arrays.stream(Season.values()).toList();
     }
 }

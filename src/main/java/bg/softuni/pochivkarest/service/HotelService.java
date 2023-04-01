@@ -243,7 +243,7 @@ public class HotelService {
         return hotelViewDTO;
     }
 
-    public void register(HotelAddDTO hotelAddDTO, String username) {
+    public HotelViewDTO register(HotelAddDTO hotelAddDTO, String username) {
         Hotel hotel = new Hotel();
         hotel.setName(hotelAddDTO.getName());
         hotel.setWebsite(hotelAddDTO.getWebsite());
@@ -289,6 +289,8 @@ public class HotelService {
 
         this.hotelRepository.save(hotel);
         this.roomRepository.saveAll(rooms);
+
+        return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
 
     public boolean hasRoomsAndAllPricesGreaterThanZero(HotelAddDTO hotelAddDTO) {

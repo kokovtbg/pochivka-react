@@ -16,7 +16,7 @@ import java.util.List;
 
 public class HotelMapper {
 
-    public void hotelToHotelViewDTO(Hotel hotel, HotelViewDTO hotelViewDTO) {
+    public HotelViewDTO hotelToHotelViewDTO(Hotel hotel, HotelViewDTO hotelViewDTO) {
         hotelViewDTO.setId(hotel.getId());
         hotelViewDTO.setName(hotel.getName());
         hotelViewDTO.setWebsite(hotel.getWebsite());
@@ -59,5 +59,7 @@ public class HotelMapper {
                 .min(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);
         hotelViewDTO.setLowestPrice(minPrice);
+
+        return hotelViewDTO;
     }
 }
