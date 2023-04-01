@@ -50,7 +50,7 @@ public class AuthenticationService {
                 user.getLastName(),
                 user.getRoles().stream().map(this::map).toList());
         String jwtToken = jwtService.generateToken(userDetails);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse(jwtToken, user.getUsername());
     }
 
     private GrantedAuthority map(Role role) {

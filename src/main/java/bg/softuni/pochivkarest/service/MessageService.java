@@ -8,6 +8,8 @@ import bg.softuni.pochivkarest.repository.MessageRepository;
 import bg.softuni.pochivkarest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -60,24 +62,26 @@ public class MessageService {
         return messageDTOs;
     }
 
-    public long sendMessage(MessageDTO messageDTO, String username) {
+    public MessageDTO sendMessage(MessageDTO messageDTO) {
         Message message = new Message();
         message.setContent(messageDTO.getContent());
         message.setDateTime(LocalDateTime.now());
         User sender = null;
-        Optional<User> optSenderByUsername = this.userRepository.findByUsername(username);
+        Optional<User> optSenderByUsername = this.userRepository
+                .findByUsername(messageDTO.getSender().getUsername());
         if (optSenderByUsername.isPresent()) {
             sender = optSenderByUsername.get();
         }
         message.setSender(sender);
         User receiver = null;
-        Optional<User> optReceiverByUsername = this.userRepository.findByUsername(messageDTO.getReceiverName());
+        Optional<User> optReceiverByUsername = this.userRepository
+                .findByUsername(messageDTO.getReceiver().getUsername());
         if (optReceiverByUsername.isPresent()) {
             receiver = optReceiverByUsername.get();
         }
         message.setReceiver(receiver);
         this.messageRepository.save(message);
-        return message.getId();
+        return messageDTO;
     }
 
     @Scheduled(cron = "0 0 0 * * *")

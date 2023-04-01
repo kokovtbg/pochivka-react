@@ -7,7 +7,6 @@ public class MessageDTO {
     private String dateTime;
     private UserMessageDTO sender;
     private UserMessageDTO receiver;
-    private String receiverName;
 
     public long getId() {
         return id;
@@ -49,11 +48,4 @@ public class MessageDTO {
         this.receiver = receiver;
     }
 
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
 }
