@@ -293,6 +293,60 @@ public class HotelService {
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
 
+    public HotelViewDTO update(HotelAddDTO hotelAddDTO, String username, long id) {
+        Optional<Hotel> hotelOpt = hotelRepository.findById(id);
+        if (hotelOpt.isEmpty()) {
+            return new HotelViewDTO();
+        }
+        Hotel hotel = hotelOpt.get();
+        hotel.setName(hotelAddDTO.getName());
+        hotel.setWebsite(hotelAddDTO.getWebsite());
+        hotel.setInformation(hotelAddDTO.getInformation());
+        String hotelAddDTOCategory = hotelAddDTO.getCategory();
+        HotelCategory category = null;
+        if (!hotelAddDTOCategory.equals("noCategory")) {
+            category = HotelCategory.valueOf(hotelAddDTOCategory);
+        }
+        hotel.setCategory(category);
+        Accommodation accommodation = Accommodation.valueOf(hotelAddDTO.getAccommodation());
+        hotel.setAccommodation(accommodation);
+        List<String> images = Arrays.stream(hotelAddDTO.getImages().split("\n")).toList();
+        hotel.setImages(images);
+        List<Comfort> comforts = new ArrayList<>();
+        hotelAddDTO.getComforts().forEach(c -> {
+            ComfortEnum comfortEnum = ComfortEnum.valueOf(c);
+            Comfort comfort = this.comfortRepository.findByName(comfortEnum);
+            comforts.add(comfort);
+        });
+        hotel.setComforts(comforts);
+        List<Room> rooms = new ArrayList<>();
+        hotelAddDTO.getRooms().forEach(r -> {
+            Room room = new Room();
+            room.setRoomType(r.getRoomType());
+            room.setSeason(r.getSeason());
+            room.setPrice(r.getPrice());
+            if (room.getPrice() != null) {
+                room.setHotel(hotel);
+                rooms.add(room);
+            }
+        });
+        hotel.setRooms(rooms);
+        Optional<User> optUserByUsername = this.userRepository.findByUsername(username);
+        User user = null;
+        if (optUserByUsername.isPresent()) {
+            user = optUserByUsername.get();
+        }
+        hotel.setOwner(user);
+        TownEnum townEnum = TownEnum.valueOf(hotelAddDTO.getTown());
+        Town town = this.townRepository.findByName(townEnum);
+        hotel.setTown(town);
+
+        this.hotelRepository.save(hotel);
+        this.roomRepository.saveAll(rooms);
+
+        return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
+    }
+
     public boolean hasRoomsAndAllPricesGreaterThanZero(HotelAddDTO hotelAddDTO) {
         List<RoomDTO> rooms = hotelAddDTO.getRooms();
         BigDecimal sum = new BigDecimal(0);

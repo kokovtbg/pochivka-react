@@ -28,4 +28,11 @@ public class HotelControllerREST {
                                  @PathVariable String username) {
         return hotelService.register(hotelAddDTO, username);
     }
+
+    @PutMapping("/hotel-update/{username}/{idHotel}")
+    public HotelViewDTO hotelAdd(@RequestBody HotelAddDTO hotelAddDTO,
+                                 @PathVariable String username,
+                                 @PathVariable long idHotel) {
+        return hotelService.update(hotelAddDTO, username, idHotel);
+    }
 }
