@@ -293,7 +293,7 @@ public class HotelService {
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
 
-    public HotelViewDTO update(HotelAddDTO hotelAddDTO, String username, long id) {
+    public HotelViewDTO update(HotelAddDTO hotelAddDTO, long id) {
         Optional<Hotel> hotelOpt = hotelRepository.findById(id);
         if (hotelOpt.isEmpty()) {
             return new HotelViewDTO();
@@ -331,12 +331,6 @@ public class HotelService {
             }
         });
         hotel.setRooms(rooms);
-        Optional<User> optUserByUsername = this.userRepository.findByUsername(username);
-        User user = null;
-        if (optUserByUsername.isPresent()) {
-            user = optUserByUsername.get();
-        }
-        hotel.setOwner(user);
         TownEnum townEnum = TownEnum.valueOf(hotelAddDTO.getTown());
         Town town = this.townRepository.findByName(townEnum);
         hotel.setTown(town);
