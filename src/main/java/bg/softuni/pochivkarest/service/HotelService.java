@@ -319,34 +319,33 @@ public class HotelService {
             comforts.add(comfort);
         });
         hotel.setComforts(comforts);
+        TownEnum townEnum = TownEnum.valueOf(hotelAddDTO.getTown());
+        Town town = this.townRepository.findByName(townEnum);
+        hotel.setTown(town);
         //TODO Maybe later to do the rooms update
-//        List<Room> rooms = new ArrayList<>();
-//        hotelAddDTO.getRooms().forEach(r -> {
-//            List<Room> roomsByTypeAndSeason = roomRepository
-//                    .findByHotelIdAndRoomTypeAndSeason(hotel.getId(), r.getRoomType(), r.getSeason());
-//            roomsByTypeAndSeason.forEach(room -> {
-//                if (room.getRoomType().equals(r.getRoomType()) && room.getSeason().equals(r.getSeason())) {
-//                    room.setPrice(r.getPrice());
-//                }
-//            });
-//            Room room = new Room();
-//            room.setRoomType(r.getRoomType());
-//            room.setSeason(r.getSeason());
-//            room.setPrice(r.getPrice());
-//
-//            if (room.getPrice() != null && room.getPrice().compareTo(BigDecimal.ZERO) > 0
-//                    && !roomsByTypeAndSeason.contains(room)) {
-//                room.setHotel(hotel);
-//                rooms.add(room);
-//            }
-//        });
-//        hotel.setRooms(rooms);
-//        TownEnum townEnum = TownEnum.valueOf(hotelAddDTO.getTown());
-//        Town town = this.townRepository.findByName(townEnum);
-//        hotel.setTown(town);
+        List<Room> rooms = new ArrayList<>();
+        hotelAddDTO.getRooms().forEach(r -> {
+            List<Room> roomsByTypeAndSeason = roomRepository
+                    .findByHotelIdAndRoomTypeAndSeason(hotel.getId(), r.getRoomType(), r.getSeason());
+            roomsByTypeAndSeason.forEach(room -> {
+                if (room.getRoomType().equals(r.getRoomType()) && room.getSeason().equals(r.getSeason())) {
+                    room.setPrice(r.getPrice());
+                }
+            });
+            Room room = new Room();
+            room.setRoomType(r.getRoomType());
+            room.setSeason(r.getSeason());
+            room.setPrice(r.getPrice());
+
+            if (room.getPrice() != null && !roomsByTypeAndSeason.contains(room)) {
+                room.setHotel(hotel);
+                rooms.add(room);
+            }
+        });
+        hotel.setRooms(rooms);
 
         this.hotelRepository.save(hotel);
-//        this.roomRepository.saveAll(rooms);
+        this.roomRepository.saveAll(rooms);
 
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
