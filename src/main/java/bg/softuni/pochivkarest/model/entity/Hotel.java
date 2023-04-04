@@ -6,6 +6,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import jakarta.persistence.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import java.util.ArrayList;
 import java.util.List;
 
