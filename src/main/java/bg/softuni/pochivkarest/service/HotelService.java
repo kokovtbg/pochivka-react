@@ -322,7 +322,7 @@ public class HotelService {
         TownEnum townEnum = TownEnum.valueOf(hotelAddDTO.getTown());
         Town town = this.townRepository.findByName(townEnum);
         hotel.setTown(town);
-        //TODO Maybe later to do the rooms update
+        /** Room */
         List<Room> rooms = new ArrayList<>();
         hotelAddDTO.getRooms().forEach(r -> {
             Room roomByTypeAndSeason = roomRepository
@@ -342,7 +342,6 @@ public class HotelService {
         hotel.setRooms(rooms);
 
         this.hotelRepository.save(hotel);
-//        this.roomRepository.saveAll(rooms);
 
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
