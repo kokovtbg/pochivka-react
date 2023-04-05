@@ -325,27 +325,24 @@ public class HotelService {
         //TODO Maybe later to do the rooms update
         List<Room> rooms = new ArrayList<>();
         hotelAddDTO.getRooms().forEach(r -> {
-            List<Room> roomsByTypeAndSeason = roomRepository
+            Room roomByTypeAndSeason = roomRepository
                     .findByHotelIdAndRoomTypeAndSeason(hotel.getId(), r.getRoomType(), r.getSeason());
-            roomsByTypeAndSeason.forEach(room -> {
-                if (room.getRoomType().equals(r.getRoomType()) && room.getSeason().equals(r.getSeason())) {
-                    room.setPrice(r.getPrice());
-                }
-            });
-            Room room = new Room();
-            room.setRoomType(r.getRoomType());
-            room.setSeason(r.getSeason());
-            room.setPrice(r.getPrice());
-
-            if (room.getPrice() != null && !roomsByTypeAndSeason.contains(room)) {
+            if (roomByTypeAndSeason != null) {
+                roomByTypeAndSeason.setPrice(r.getPrice());
+            } else {
+                Room room = new Room();
+                room.setRoomType(r.getRoomType());
+                room.setSeason(r.getSeason());
+                room.setPrice(r.getPrice());
                 room.setHotel(hotel);
+                roomRepository.save(room);
                 rooms.add(room);
             }
         });
         hotel.setRooms(rooms);
 
         this.hotelRepository.save(hotel);
-        this.roomRepository.saveAll(rooms);
+//        this.roomRepository.saveAll(rooms);
 
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
