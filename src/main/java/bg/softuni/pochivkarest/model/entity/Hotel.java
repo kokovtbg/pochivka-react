@@ -33,7 +33,7 @@ public class Hotel {
     private List<String> images;
     @ManyToMany
     private List<Comfort> comforts;
-    @OneToMany(targetEntity = Room.class, mappedBy = "hotel")
+    @OneToMany(targetEntity = Room.class, mappedBy = "hotel", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Room> rooms;
     @ManyToOne(optional = false)

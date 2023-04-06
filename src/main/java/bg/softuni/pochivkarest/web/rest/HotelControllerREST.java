@@ -34,4 +34,9 @@ public class HotelControllerREST {
                                  @PathVariable long idHotel) {
         return hotelService.update(hotelAddDTO, idHotel);
     }
+
+    @DeleteMapping("/hotel-delete/{id}")
+    public HotelViewDTO deleteHotel(@PathVariable long id) {
+        return hotelService.delete(id);
+    }
 }

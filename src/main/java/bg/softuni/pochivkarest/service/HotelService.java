@@ -346,6 +346,11 @@ public class HotelService {
         return hotelMapper.hotelToHotelViewDTO(hotel, new HotelViewDTO());
     }
 
+    public HotelViewDTO delete(long id) {
+        hotelRepository.deleteById(id);
+        return new HotelViewDTO();
+    }
+
     public boolean hasRoomsAndAllPricesGreaterThanZero(HotelAddDTO hotelAddDTO) {
         List<RoomDTO> rooms = hotelAddDTO.getRooms();
         BigDecimal sum = new BigDecimal(0);
